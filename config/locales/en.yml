@@ -20,4 +20,5 @@ en:
   destroy: "Delete"
   confirm: "Are you sure?"
   new_book: "New Book"
+  edit_book: "Edit Book"
   back: "Back"

@@ -20,4 +20,5 @@ ja:
   destroy: "削除"
   confirm: "本当によろしいですか？"
   new_book: "本を追加する"
+  edit_book: "本を編集する"
   back: "戻る"
