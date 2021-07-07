@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
-  resources :books
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  get '/:locale' => 'books#index'
+
+  scope '(:locale)', locale: /en|ja/ do
+    resources :books
+  end
 end
