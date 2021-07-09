@@ -16,13 +16,15 @@
     <% if user_signed_in? %>
       <div>
         <strong><%= current_user.email %></strong>
-        <%= link_to 'Edit profile', edit_user_registration_path %> |
-        <%= link_to 'Logout', destroy_user_session_path, method: :delete %>
+        <%= link_to t('views.common.edit'), edit_user_registration_path %> |
+        <%= link_to t('devise.sessions.destroy.sign_out'), destroy_user_session_path, method: :delete %>
       </div>
 
+      <hr />
+
       <div>
-        <%= link_to '本一覧', books_path %> |
-        <%= link_to 'ユーザー一覧', users_path %>
+        <%= link_to Book.model_name.human, books_path %> |
+        <%= link_to User.model_name.human, users_path %>
       </div>
     <% end %>
 

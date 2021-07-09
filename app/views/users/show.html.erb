@@ -18,8 +18,8 @@
   <%= @user.about %>
 </p>
 
-<%= link_to '戻る', users_path %>
+<%= link_to t('views.common.back'), users_path %>
 
 <% if current_user.id == @user.id %>
-| <%= link_to '編集', edit_user_registration_path %>
+| <%= link_to t('views.common.edit'), edit_user_registration_path %>
 <% end %>
