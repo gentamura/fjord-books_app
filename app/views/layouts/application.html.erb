@@ -14,9 +14,16 @@
     <% if alert %><p style="color:red;"><%= alert %></p><% end %>
 
     <% if user_signed_in? %>
-      <strong><%= current_user.email %></strong>
-      <%= link_to 'Edit profile', edit_user_registration_path %> |
-      <%= link_to 'Logout', destroy_user_session_path, method: :delete %>
+      <div>
+        <strong><%= current_user.email %></strong>
+        <%= link_to 'Edit profile', edit_user_registration_path %> |
+        <%= link_to 'Logout', destroy_user_session_path, method: :delete %>
+      </div>
+
+      <div>
+        <%= link_to '本一覧', books_path %> |
+        <%= link_to 'ユーザー一覧', users_path %>
+      </div>
     <% end %>
 
     <%= yield %>
