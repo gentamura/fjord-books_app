@@ -2,12 +2,20 @@
 
 <p>
   <strong><%= User.human_attribute_name(:followings) %>:</strong>
-  <%= link_to @user.followings.count, followings_user_path(@user) %>
+  <% if @user.followings.count == 0 %>
+    0
+  <% else %>
+    <%= link_to @user.followings.count, followings_user_path(@user) %>
+  <% end %>
 </p>
 
 <p>
   <strong><%= User.human_attribute_name(:followers) %>:</strong>
-  <%= link_to @user.followers.count, followers_user_path(@user) %>
+  <% if @user.followers.count == 0 %>
+    0
+  <% else %>
+    <%= link_to @user.followers.count, followers_user_path(@user) %>
+  <% end %>
 </p>
 
 <p>
