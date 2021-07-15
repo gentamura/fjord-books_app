@@ -1,5 +1,7 @@
 <h1><%= t('views.common.title_show', name: User.model_name.human) %></h1>
 
+<%= render 'follow_form' if user_signed_in? %>
+
 <p>
   <strong><%= User.human_attribute_name(:followings) %>:</strong>
   <% if @user.followings.count == 0 %>
