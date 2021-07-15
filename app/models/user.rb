@@ -18,6 +18,8 @@ class User < ApplicationRecord
                                    inverse_of: :following
   has_many :followers, through: :follower_relationships
 
+  scope :paginate, ->(params_page) { order(:id).page(params_page) }
+
   def follow(other_user)
     following_relationships.create(following_id: other_user.id)
   end
