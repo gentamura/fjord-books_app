@@ -7,8 +7,7 @@ class UsersController < ApplicationController
     @users = User.with_attached_avatar.paginate(params[:page])
   end
 
-  def show
-  end
+  def show; end
 
   def followings
     @users = @user.followings.paginate(params[:page])

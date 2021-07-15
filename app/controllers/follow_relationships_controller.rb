@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FollowRelationshipsController < ApplicationController
   def create
     user = User.find(params[:following_id])
