@@ -1,0 +1,29 @@
+<h1><%= Report.model_name.human %></h1>
+
+<table>
+  <thead>
+    <tr>
+      <th><%= Report.human_attribute_name(:title) %></th>
+      <th><%= Report.human_attribute_name(:content) %></th>
+      <th><%= Report.human_attribute_name(:created_at) %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @reports.each do |report| %>
+      <tr>
+        <td><%= report.title %></td>
+        <td><%= report.content %></td>
+        <td><%= report.created_at.in_time_zone %></td>
+        <td><%= link_to t('views.common.show'), report %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @reports %>
+
+<br>
+
+<%= link_to t('views.common.new'), new_report_path %>
