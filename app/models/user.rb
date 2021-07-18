@@ -9,10 +9,10 @@ class User < ApplicationRecord
   validate :avatar_content_type, if: :avatar_attached?
 
   def avatar_content_type
-    extension = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif']
-    return if avatar.content_type.in?(extension)
+    extensions = ApplicationController.helpers.image_extensions
+    return if avatar.content_type.in?(extensions)
 
-    ext_str = extension.map { |t| t.sub('image/', '') }.join('、')
+    ext_str = extensions.map { |t| t.sub('image/', '') }.join('、')
     errors.add(User.human_attribute_name(:avatar), "の拡張子が正しくありません。#{ext_str}のいずれかの画像をアップロードしてください。")
   end
 
