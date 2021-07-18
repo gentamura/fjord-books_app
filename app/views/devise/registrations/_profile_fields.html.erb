@@ -24,7 +24,7 @@
 
   <% if current_user %>
     <p>
-      <strong><%= t('current_avatar') %>:</strong>
+      <strong><%= t('.avatar') %>:</strong>
       <%= image_tag current_user.avatar.variant(resize: '80x80') if current_user.avatar.attached? %>
     </p>
   <% end %>
