@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_17_050200) do
+ActiveRecord::Schema.define(version: 2021_07_18_081259) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -49,6 +49,21 @@ ActiveRecord::Schema.define(version: 2021_07_17_050200) do
     t.string "picture"
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.text "content"
+    t.string "bookable_type"
+    t.integer "bookable_id"
+    t.string "reportable_type"
+    t.integer "reportable_id"
+    t.string "userable_type"
+    t.integer "userable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["bookable_type", "bookable_id"], name: "index_comments_on_bookable"
+    t.index ["reportable_type", "reportable_id"], name: "index_comments_on_reportable"
+    t.index ["userable_type", "userable_id"], name: "index_comments_on_userable"
+  end
+
   create_table "relationships", force: :cascade do |t|
     t.integer "following_id", null: false
     t.integer "follower_id", null: false
@@ -62,10 +77,11 @@ ActiveRecord::Schema.define(version: 2021_07_17_050200) do
     t.string "title"
     t.text "content"
     t.string "userable_type"
-    t.integer "userable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["userable_type", "userable_id"], name: "index_reports_on_userable"
+    t.integer "userable_id"
+    t.index ["userable_id"], name: "index_reports_on_userable_id"
+    t.index ["userable_type"], name: "index_reports_on_userable"
   end
 
   create_table "users", force: :cascade do |t|

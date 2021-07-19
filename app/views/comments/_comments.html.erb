@@ -1,0 +1,97 @@
+<% if polymorphic_obj.comments.blank? %>
+  <p><%= t('.no_comments') %></p>
+<% else %>
+  <table>
+    <thead>
+      <tr>
+        <th><%= Comment.human_attribute_name(:content) %></th>
+        <th><%= Comment.human_attribute_name(:created_at) %></th>
+        <th><%= Comment.human_attribute_name(:name) %></th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% polymorphic_obj.comments.each do |comment| %>
+        <tr>
+          <td class="js-editable-comment-<%= comment.id %>"><%= comment.content %></td>
+          <td><%= comment.created_at.in_time_zone %></td>
+          <td><%= comment.userable.name.blank? ? comment.userable.email : comment.userable.name %></td>
+          <% if current_user == comment.userable %>
+            <td><%= link_to t('views.common.edit'), '#', class: 'js-comment-edit', data: { comment_id: comment.id, polymorphic_name: polymorphic_obj.model_name.singular, polymorphic_id: polymorphic_obj.id } %></td>
+            <td><%= link_to t('views.common.destroy'), comment_path(comment, "#{polymorphic_obj.model_name.singular}_id": polymorphic_obj.id), method: :delete, data: { confirm: t('views.common.delete_confirm') } %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<p>
+  <%= form_with(url: comments_path, local: true) do |f| %>
+    <%= f.hidden_field "#{polymorphic_obj.model_name.singular}_id", value: polymorphic_obj.id %>
+    <%= f.text_area :content, name: 'comment[content]', required: true %>
+    <%= f.submit t('views.common.new') %>
+  <% end %>
+</p>
+
+<script>
+  // Text data
+  var updateText = '<%= t('helpers.submit.update') %>';
+  var editText = '<%= t('views.common.edit') %>';
+  var contentText = '<%= Comment.human_attribute_name(:content) %>';
+
+  // Common input element
+  var inputEl = document.createElement('input');
+
+  // CSRF Token
+  var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+  var editEls = document.querySelectorAll('.js-comment-edit');
+  editEls.forEach((editEl) => {
+    editEl.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      var editEl = e.currentTarget;
+      var { commentId, polymorphicId } = editEl.dataset;
+      var commentEl = document.querySelector(`.js-editable-comment-${commentId}`);
+
+      if ('editing' in editEl.dataset) {
+        var comment = { content: inputEl.value };
+        var body = editEl.dataset.polymorphicName === 'report'
+          ? { comment, report_id: polymorphicId }
+          : { comment, book_id: polymorphicId };
+
+        fetch(`/comments/${commentId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
+          },
+          body: JSON.stringify(body),
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            if (data.status_code === 200) {
+              commentEl.children = null;
+              commentEl.innerText = data.comment.content;
+              editEl.innerText = editText;
+              delete editEl.dataset.editing;
+            } else {
+              data.errors.content.forEach((msg) => {
+                alert(`${contentText}${msg}`);
+              });
+            }
+          });
+      } else {
+        inputEl.value = commentEl.innerText;
+
+        commentEl.innerText = '';
+        commentEl.appendChild(inputEl);
+        editEl.dataset.editing = null;
+        editEl.innerText = updateText;
+      }
+    });
+  });
+</script>

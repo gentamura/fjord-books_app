@@ -12,7 +12,8 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
 
-  has_many :reports, as: :userable
+  has_many :reports, as: :userable, dependent: :destroy
+  has_many :comments, as: :userable, dependent: :destroy
 
   def following?(user)
     active_relationships.where(following_id: user.id).exists?
