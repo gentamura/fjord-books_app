@@ -4,8 +4,8 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   setup do
-    @alice = User.create!(email: 'alice@example.com', password: 'password')
-    @bob = User.create!(email: 'bob@example.com', password: 'password')
+    @alice = users(:alice)
+    @bob = users(:bob)
   end
 
   test '#following?' do
