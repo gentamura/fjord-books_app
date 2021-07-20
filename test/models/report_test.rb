@@ -17,7 +17,7 @@ class ReportTest < ActiveSupport::TestCase
 
   test '#created_on' do
     ymd_str = '2021-01-01'
-    report = Report.create!(title: 'report title', content: 'report content', user: @alice, created_at: Time.new.utc(ymd_str))
+    report = Report.create!(title: 'report title', content: 'report content', user: @alice, created_at: Time.zone.local(ymd_str))
 
     assert_equal Date.parse(ymd_str), report.created_on
   end
