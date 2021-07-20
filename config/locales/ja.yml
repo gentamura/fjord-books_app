@@ -238,3 +238,5 @@ ja:
     registrations:
       edit:
         title: "アカウント編集"
+      profile_fields:
+        avatar: "現在のアイコン画像"
