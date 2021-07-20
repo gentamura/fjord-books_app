@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# one:
-#   user: one
-#   title: MyString
-#   content: MyText
+new_report:
+  user: alice
+  title: タイトルテスト
+  content: 内容テスト
 
 # two:
 #   user: two
