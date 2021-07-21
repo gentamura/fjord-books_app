@@ -10,11 +10,11 @@ class UsersController < ApplicationController
   def show; end
 
   def followings
-    @users = @user.followings.paginate(params[:page])
+    @users = @user.followings.order(:id).page(params[:page])
   end
 
   def followers
-    @users = @user.followers.paginate(params[:page])
+    @users = @user.followers.order(:id).page(params[:page])
   end
 
   private
