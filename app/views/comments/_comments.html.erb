@@ -6,7 +6,7 @@
   }
 </script>
 
-<% if polymorphic_obj.comments.blank? %>
+<% if parent.comments.blank? %>
   <p><%= t('.no_comments') %></p>
 <% else %>
   <table>
@@ -20,14 +20,14 @@
     </thead>
 
     <tbody>
-      <% polymorphic_obj.comments.each do |comment| %>
+      <% parent.comments.each do |comment| %>
         <tr>
           <td class="js-editable-comment-<%= comment.id %>"><%= comment.content %></td>
           <td><%= comment.created_at.in_time_zone %></td>
-          <td><%= comment.userable.name.blank? ? comment.userable.email : comment.userable.name %></td>
-          <% if current_user == comment.userable %>
-            <td><%= link_to t('views.common.edit'), '#', class: 'js-comment-edit', data: { comment_id: comment.id, polymorphic_name: polymorphic_obj.model_name.singular, polymorphic_id: polymorphic_obj.id } %></td>
-            <td><%= link_to t('views.common.destroy'), comment_path(comment, "#{polymorphic_obj.model_name.singular}_id": polymorphic_obj.id), method: :delete, data: { confirm: t('views.common.delete_confirm') } %></td>
+          <td><%= comment.user.name.blank? ? comment.user.email : comment.user.name %></td>
+          <% if current_user == comment.user %>
+            <td><%= link_to t('views.common.edit'), '#', class: 'js-comment-edit', data: { path: polymorphic_path([parent, comment]) } %></td>
+            <td><%= link_to t('views.common.destroy'), [parent, comment], method: :delete, data: { confirm: t('views.common.delete_confirm') } %></td>
           <% end %>
         </tr>
       <% end %>
@@ -36,8 +36,7 @@
 <% end %>
 
 <p>
-  <%= form_with(url: comments_path, local: true) do |f| %>
-    <%= f.hidden_field "#{polymorphic_obj.model_name.singular}_id", value: polymorphic_obj.id %>
+  <%= form_with(model: [parent, parent.comments.new], local: true) do |f| %>
     <%= f.text_area :content, name: 'comment[content]', required: true %>
     <%= f.submit t('views.common.new') %>
   <% end %>

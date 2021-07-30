@@ -15,7 +15,7 @@
   <%= @report.created_at.in_time_zone %>
 </p>
 
-<% if current_user == @report.userable %>
+<% if current_user == @report.user %>
   <%= link_to t('views.common.edit'), edit_report_path(@report) %> |
   <%= link_to t('views.common.destroy'), @report, method: :delete, data: { confirm: t('views.common.delete_confirm') } %> |
 <% end %>
@@ -23,4 +23,4 @@
 
 <hr />
 
-<%= render 'comments/comments', { polymorphic_obj: @report } %>
+<%= render 'comments/comments', { parent: @report } %>

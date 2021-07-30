@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-  before_action :set_polymorphic, only: %i[create update destroy]
+  before_action :set_parent, only: %i[create update destroy]
   before_action :set_comment, only: %i[update destroy]
 
   def create
-    @comment = Comment.new(comment_params.merge(@polymorphic_hash))
+    @comment = @parent.comments.new(comment_params)
 
     if @comment.save
-      redirect_to @polymorphic_obj, notice: t('controllers.common.notice_create', name: Comment.model_name.human)
+      redirect_to @parent, notice: t('controllers.common.notice_create', name: Comment.model_name.human)
     else
-      redirect_to report_path(@polymorphic_obj.id)
+      redirect_to @parent, alert: @comment.errors.full_messages.join(" ")
     end
   end
 
@@ -25,24 +25,16 @@ class CommentsController < ApplicationController
   def destroy
     @comment.destroy
 
-    redirect_to @polymorphic_url, notice: t('controllers.common.notice_destroy', name: Comment.model_name.human)
+    redirect_to url_for(@parent), notice: t('controllers.common.notice_destroy', name: Comment.model_name.human)
   end
 
   private
 
-  def set_polymorphic
+  def set_parent
     if params[:report_id]
-      report = Report.find(params[:report_id])
-
-      @polymorphic_obj = report
-      @polymorphic_hash = { reportable: report, userable: current_user }
-      @polymorphic_url = url_for(controller: :reports, action: :show, id: report.id, only_path: true)
+      @parent = Report.find(params[:report_id])
     elsif params[:book_id]
-      book = Book.find(params[:book_id])
-
-      @polymorphic_obj = book
-      @polymorphic_hash = { bookable: book, userable: current_user }
-      @polymorphic_url = url_for(controller: :books, action: :show, id: book.id, only_path: true)
+      @parent = Book.find(params[:book_id])
     end
   end
 
@@ -51,6 +43,6 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:content)
+    params.require(:comment).permit(:content).merge(user_id: current_user.id)
   end
 end

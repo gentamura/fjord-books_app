@@ -5,7 +5,7 @@ class CreateReports < ActiveRecord::Migration[6.1]
     create_table :reports do |t|
       t.string :title, null: false
       t.text :content, null: false
-      t.references :userable, polymorphic: true
+      t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end

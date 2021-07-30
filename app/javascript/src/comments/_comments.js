@@ -18,16 +18,15 @@ document.addEventListener('turbolinks:load', () => {
         e.preventDefault();
 
         var editEl = e.currentTarget;
-        var { commentId, polymorphicId } = editEl.dataset;
+        var { path } = editEl.dataset;
+        var commentId = path.split('/').slice(-1)[0];
         var commentEl = document.querySelector(`.js-editable-comment-${commentId}`);
 
         if ('editing' in editEl.dataset) {
           var comment = { content: inputEl.value };
-          var body = editEl.dataset.polymorphicName === 'report'
-            ? { comment, report_id: polymorphicId }
-            : { comment, book_id: polymorphicId };
+          var body = { comment };
 
-          fetch(`/comments/${commentId}`, {
+          fetch(path, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',

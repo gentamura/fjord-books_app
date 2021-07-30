@@ -51,17 +51,13 @@ ActiveRecord::Schema.define(version: 2021_07_18_081259) do
 
   create_table "comments", force: :cascade do |t|
     t.text "content"
-    t.string "bookable_type"
-    t.integer "bookable_id"
-    t.string "reportable_type"
-    t.integer "reportable_id"
-    t.string "userable_type"
-    t.integer "userable_id"
+    t.string "commentable_type"
+    t.integer "commentable_id"
+    t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["bookable_type", "bookable_id"], name: "index_comments_on_bookable"
-    t.index ["reportable_type", "reportable_id"], name: "index_comments_on_reportable"
-    t.index ["userable_type", "userable_id"], name: "index_comments_on_userable"
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "relationships", force: :cascade do |t|
@@ -74,14 +70,12 @@ ActiveRecord::Schema.define(version: 2021_07_18_081259) do
   end
 
   create_table "reports", force: :cascade do |t|
-    t.string "title"
-    t.text "content"
-    t.string "userable_type"
+    t.string "title", null: false
+    t.text "content", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "userable_id"
-    t.index ["userable_id"], name: "index_reports_on_userable_id"
-    t.index ["userable_type"], name: "index_reports_on_userable"
+    t.index ["user_id"], name: "index_reports_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -102,4 +96,6 @@ ActiveRecord::Schema.define(version: 2021_07_18_081259) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "comments", "users"
+  add_foreign_key "reports", "users"
 end
