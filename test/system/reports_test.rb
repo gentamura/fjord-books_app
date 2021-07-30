@@ -23,7 +23,6 @@ class ReportsTest < ApplicationSystemTestCase
     click_on '登録する'
 
     assert_text '日報が作成されました。'
-    click_on '戻る'
   end
 
   test 'update a report' do
@@ -37,7 +36,6 @@ class ReportsTest < ApplicationSystemTestCase
     assert_text '更新タイトルテスト'
     assert_text '更新内容テスト'
     assert_text '日報が更新されました。'
-    click_on '戻る'
   end
 
   test 'delete a report' do
