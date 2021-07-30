@@ -12,7 +12,7 @@ document.addEventListener('turbolinks:load', () => {
     var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
     var editEls = document.querySelectorAll('.js-comment-edit');
-    console.log('editEls.length', editEls.length);
+
     editEls.forEach((editEl) => {
       editEl.addEventListener('click', (e) => {
         e.preventDefault();
@@ -37,7 +37,6 @@ document.addEventListener('turbolinks:load', () => {
           })
             .then(res => res.json())
             .then(data => {
-              console.log(data);
               if (data.status_code === 200) {
                 commentEl.children = null;
                 commentEl.innerText = data.comment.content;
