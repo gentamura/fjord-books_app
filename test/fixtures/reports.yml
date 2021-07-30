@@ -4,8 +4,3 @@ new_report:
   user: alice
   title: タイトルテスト
   content: 内容テスト
-
-# two:
-#   user: two
-#   title: MyString
-#   content: MyText
