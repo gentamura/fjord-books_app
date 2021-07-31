@@ -1,0 +1,43 @@
+<script type="application/json" id="commentTextData">
+  {
+    "updateText": "<%= t('helpers.submit.update') %>",
+    "editText": "<%= t('views.common.edit') %>",
+    "contentText": "<%= Comment.human_attribute_name(:content) %>"
+  }
+</script>
+
+<% if parent.comments.blank? %>
+  <p><%= t('.no_comments') %></p>
+<% else %>
+  <table>
+    <thead>
+      <tr>
+        <th><%= Comment.human_attribute_name(:content) %></th>
+        <th><%= Comment.human_attribute_name(:created_at) %></th>
+        <th><%= Comment.human_attribute_name(:name) %></th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% parent.comments.each do |comment| %>
+        <tr>
+          <td class="js-editable-comment-<%= comment.id %>"><%= comment.content %></td>
+          <td><%= comment.created_at.in_time_zone %></td>
+          <td><%= comment.user.name.blank? ? comment.user.email : comment.user.name %></td>
+          <% if current_user == comment.user %>
+            <td><%= link_to t('views.common.edit'), '#', class: 'js-comment-edit', data: { path: polymorphic_path([parent, comment]) } %></td>
+            <td><%= link_to t('views.common.destroy'), [parent, comment], method: :delete, data: { confirm: t('views.common.delete_confirm') } %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<p>
+  <%= form_with(model: [parent, parent.comments.new], local: true) do |f| %>
+    <%= f.text_area :content, name: 'comment[content]', required: true %>
+    <%= f.submit t('views.common.new') %>
+  <% end %>
+</p>
